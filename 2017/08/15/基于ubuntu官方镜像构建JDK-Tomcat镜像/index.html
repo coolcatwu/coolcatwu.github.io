@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于ubuntu官方镜像构建JDK+Tomcat镜像 | Mosasaur</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Docker,Linux," />
+  
+
+  <meta name="description" content="前言今天基于ubuntu16.04官方镜像使用Dockerfile制作JDK+Tomcat镜像，之前一直在看DOCKER DOSC，今天第一次开始实际操作，还是踩了不少的坑。
+吹逼中1FROM ubuntu:16.04
+这个就不用多说了1LABEL auther=&quot;wuchenzhi&quot;
+自己写的Dockerfile还是署个名吧，这里使用标签，官方的意思是尽量使用LABEL，不要再使用MAINTAI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于ubuntu官方镜像构建JDK+Tomcat镜像">
+<meta property="og:url" content="http://mosasaur.cn/2017/08/15/基于ubuntu官方镜像构建JDK-Tomcat镜像/index.html">
+<meta property="og:site_name" content="Mosasaur">
+<meta property="og:description" content="前言今天基于ubuntu16.04官方镜像使用Dockerfile制作JDK+Tomcat镜像，之前一直在看DOCKER DOSC，今天第一次开始实际操作，还是踩了不少的坑。
+吹逼中1FROM ubuntu:16.04
+这个就不用多说了1LABEL auther=&quot;wuchenzhi&quot;
+自己写的Dockerfile还是署个名吧，这里使用标签，官方的意思是尽量使用LABEL，不要再使用MAINTAI">
+<meta property="og:updated_time" content="2017-08-15T10:27:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于ubuntu官方镜像构建JDK+Tomcat镜像">
+<meta name="twitter:description" content="前言今天基于ubuntu16.04官方镜像使用Dockerfile制作JDK+Tomcat镜像，之前一直在看DOCKER DOSC，今天第一次开始实际操作，还是踩了不少的坑。
+吹逼中1FROM ubuntu:16.04
+这个就不用多说了1LABEL auther=&quot;wuchenzhi&quot;
+自己写的Dockerfile还是署个名吧，这里使用标签，官方的意思是尽量使用LABEL，不要再使用MAINTAI">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f3499adac8ab62f654f19eec5f0b0f45";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">目录</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">目录</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#吹逼中"><span class="toc-text">吹逼中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOCKERFILE"><span class="toc-text">DOCKERFILE</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-基于ubuntu官方镜像构建JDK-Tomcat镜像" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">基于ubuntu官方镜像构建JDK+Tomcat镜像</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.08.15</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>coolcat</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://www.mosasaur.cn/2017/08/15/基于ubuntu官方镜像构建JDK-Tomcat镜像/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>今天基于ubuntu16.04官方镜像使用Dockerfile制作JDK+Tomcat镜像，之前一直在看DOCKER DOSC，今天第一次开始实际操作，还是踩了不少的坑。</p>
+<h3 id="吹逼中"><a href="#吹逼中" class="headerlink" title="吹逼中"></a>吹逼中</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FROM ubuntu:16.04</div></pre></td></tr></table></figure>
+<p>这个就不用多说了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LABEL auther=<span class="string">"wuchenzhi"</span></div></pre></td></tr></table></figure></p>
+<p>自己写的Dockerfile还是署个名吧，这里使用标签，官方的意思是尽量使用LABEL，不要再使用MAINTAINER了，那就LABEL吧！<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ADD jdk-8u91-linux-x64.gz /usr/<span class="built_in">local</span>/</div><div class="line">ADD apache-tomcat-8.5.6.tar.gz /usr/<span class="built_in">local</span>/</div></pre></td></tr></table></figure></p>
+<p>使用ADD的时候就遇到坑了，可能是自己官方文档看得不仔细，一开始我把压缩文件ADD到/usr/local后，还使用RUN tar 试图解压文件，但build时报错，文件不存在，回去仔细看文档才发现，ADD命令会自动解压其能识别的压缩方式，后来想想也是，如果需要手动解压，那还需要再手动删除，太麻烦，docker帮我们干了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RUN /bin/bash -c <span class="string">'apt-get update;apt-get -y install vim'</span></div></pre></td></tr></table></figure></p>
+<p>RUN 在Linux上默认使用/bin/sh 部分命令还是不能运行的，个人倾向使用/bin/bash<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ENV JAVA_HOME /usr/<span class="built_in">local</span>/jdk1.8.0_91</div><div class="line">ENV JRE_HOME <span class="variable">$JAVA_HOME</span>/jre</div><div class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JRE_HOME</span>/lib</div><div class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:</div><div class="line">ENV TOMCAT_HOME /usr/<span class="built_in">local</span>/apache-tomcat-8.5.6</div></pre></td></tr></table></figure></p>
+<p>ENV 是很好用的，它不光能在Dockerfile生效，还能生效于镜像所生成的容器实例（之前还想着RUN 来修改…）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">EXPOSE 8080</div><div class="line">CMD [<span class="string">"/bin/bash"</span>]</div></pre></td></tr></table></figure></p>
+<h3 id="DOCKERFILE"><a href="#DOCKERFILE" class="headerlink" title="DOCKERFILE"></a>DOCKERFILE</h3><p>最后来个完整的Dockerfile，我的第一篇博文就算结束了，不是很满意，以后回来再改过<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">FROM ubuntu:16.04</div><div class="line">LABEL auther=<span class="string">"wuchenzhi"</span></div><div class="line">ADD jdk-8u91-linux-x64.gz /usr/<span class="built_in">local</span>/</div><div class="line">ADD apache-tomcat-8.5.6.tar.gz /usr/<span class="built_in">local</span>/</div><div class="line">RUN /bin/bash -c <span class="string">'apt-get update;apt-get -y install vim'</span></div><div class="line">ENV JAVA_HOME /usr/<span class="built_in">local</span>/jdk1.8.0_91</div><div class="line">ENV JRE_HOME <span class="variable">$JAVA_HOME</span>/jre</div><div class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JRE_HOME</span>/lib</div><div class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:</div><div class="line">ENV TOMCAT_HOME /usr/<span class="built_in">local</span>/apache-tomcat-8.5.6</div><div class="line">EXPOSE 8080</div><div class="line">CMD [<span class="string">"/bin/bash"</span>]</div></pre></td></tr></table></figure></p>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/07/23/hello-world/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'mosasaur-cn';
+    
+    var disqus_url = 'http://mosasaur.cn/2017/08/15/基于ubuntu官方镜像构建JDK-Tomcat镜像/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//mosasaur-cn.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
