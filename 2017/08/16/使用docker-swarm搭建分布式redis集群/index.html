@@ -7,7 +7,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用docker stack 搭建redis cluster | Mosasaur</title>
+  <title>使用docker-swarm搭建分布式redis集群 | Mosasaur</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -18,14 +18,14 @@
   <meta name="description" content="前言今天要使用docker搭建redis cluster,首先还是镜像，redis官方镜像表示玩不来啊，还是自定义吧
 镜像制作123456789FROM ubuntu:16.04LABEL auther=&quot;wuchenzhi&quot;ADD redis-3.2.10.tar.gz /opt/ADD redis.conf /opt/RUN /bin/bash -c &apos;apt-get update;apt-g">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用docker stack 搭建redis cluster">
+<meta property="og:title" content="使用docker-swarm搭建分布式redis集群">
 <meta property="og:url" content="http://mosasaur.cn/2017/08/16/使用docker-swarm搭建分布式redis集群/index.html">
 <meta property="og:site_name" content="Mosasaur">
 <meta property="og:description" content="前言今天要使用docker搭建redis cluster,首先还是镜像，redis官方镜像表示玩不来啊，还是自定义吧
 镜像制作123456789FROM ubuntu:16.04LABEL auther=&quot;wuchenzhi&quot;ADD redis-3.2.10.tar.gz /opt/ADD redis.conf /opt/RUN /bin/bash -c &apos;apt-get update;apt-g">
-<meta property="og:updated_time" content="2017-08-22T08:48:05.000Z">
+<meta property="og:updated_time" content="2017-08-22T09:18:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用docker stack 搭建redis cluster">
+<meta name="twitter:title" content="使用docker-swarm搭建分布式redis集群">
 <meta name="twitter:description" content="前言今天要使用docker搭建redis cluster,首先还是镜像，redis官方镜像表示玩不来啊，还是自定义吧
 镜像制作123456789FROM ubuntu:16.04LABEL auther=&quot;wuchenzhi&quot;ADD redis-3.2.10.tar.gz /opt/ADD redis.conf /opt/RUN /bin/bash -c &apos;apt-get update;apt-g">
 
@@ -172,7 +172,7 @@
 <div class="content content-post CENTER">
    <article id="post-使用docker-swarm搭建分布式redis集群" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">使用docker stack 搭建redis cluster</h1>
+    <h1 class="post-title">使用docker-swarm搭建分布式redis集群</h1>
 
     <div class="article-meta">
       <span>
